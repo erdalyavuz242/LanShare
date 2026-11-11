@@ -7,9 +7,13 @@ jobs:
   test-macos:
     runs-on: macos-15
     steps:
-    - name: Drive'dan ZIP Dosyasini Indir
+    - name: gdown Yukle
       run: |
-        curl -L -o LanShare.app.zip "https://drive.google.com/uc?export=download&id=1z-PWMKGWQtEFlKfWHv3Okzr0fHrP9W2E"
+        pip3 install gdown
+
+    - name: Google Drive'dan ZIP Dosyasini Indir
+      run: |
+        gdown "https://drive.google.com/uc?id=1z-PWMKGWQtEFlKfWHv3Okzr0fHrP9W2E" -O LanShare.app.zip
     
     - name: ZIP Dosyasini Ac
       run: unzip LanShare.app.zip
