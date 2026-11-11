@@ -1,0 +1,33 @@
+name: Mac Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-macos:
+    runs-on: macos-14
+    steps:
+    - name: Drive'dan ZIP Dosyasini Indir
+      run: |
+        curl -L -o LanShare.app.zip "https://drive.google.com/uc?export=download&id=1z-PWMKGWQtEFlKfWHv3Okzr0fHrP9W2E"
+    
+    - name: ZIP Dosyasini Ac
+      run: unzip LanShare.app.zip
+    
+    - name: Calistirma Izni Ver ve Imzala
+      run: |
+        chmod +x ./LanShare.app/Contents/MacOS/LanShare.Desktop
+        xattr -cr ./LanShare.app
+        codesign --force --deep --sign - ./LanShare.app
+    
+    - name: Uygulamayi Baslat ve Kontrol Et
+      run: |
+        echo "Uygulama baslatiliyor..."
+        open ./LanShare.app
+        sleep 10
+        if pgrep -f "LanShare.Desktop" > /dev/null; then
+          echo "✅ Uygulama basariyla acildi ve calisiyor!"
+        else
+          echo "❌ Uygulama acilmadi veya hemen kapandi."
+          exit 1
+        fi
